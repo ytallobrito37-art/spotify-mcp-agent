@@ -74,10 +74,14 @@ class SpotifyAgent:
         estado_inicial = AgentState(pergunta=pergunta)
         resultado = self.graph.invoke(estado_inicial)
         
+        # LangGraph retorna dict, não objeto
+        resultados = resultado.get("resultados", []) if isinstance(resultado, dict) else resultado.resultados
+        analise = resultado.get("analise", "") if isinstance(resultado, dict) else resultado.analise
+        
         return {
             "pergunta": pergunta,
-            "resultados": resultado.resultados[:3],  # Top 3
-            "analise": resultado.analise
+            "resultados": resultados[:3],  # Top 3
+            "analise": analise
         }
 
     def print_resultado(self, resultado: Dict[str, Any]):
