@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from langgraph.graph import StateGraph, END
 from typing import List, Dict, Any
 from pydantic import BaseModel
