@@ -98,14 +98,14 @@ def buscar_artista(
         resultados = sp.search(q=nome_artista, type='artist', limit=limite)
         
         artistas = []
-        for artist in resultados['artists']['items']:
+        for artist in resultados.get('artists', {}).get('items', []):
             artistas.append({
-                "id": artist['id'],
-                "nome": artist['name'],
-                "generos": artist['genres'],
-                "popularidade": artist['popularity'],
-                "seguidores": artist['followers']['total'],
-                "url": artist['external_urls']['spotify']
+                "id": artist.get('id', ''),
+                "nome": artist.get('name', ''),
+                "generos": artist.get('genres', []),
+                "popularidade": artist.get('popularity', 0),
+                "seguidores": artist.get('followers', {}).get('total', 0),
+                "url": artist.get('external_urls', {}).get('spotify', '')
             })
         
         return {
