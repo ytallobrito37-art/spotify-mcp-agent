@@ -51,15 +51,15 @@ def buscar_musica(
         resultados = sp.search(q=nome_musica, type='track', limit=limite)
         
         musicas = []
-        for track in resultados['tracks']['items']:
+        for track in resultados.get('tracks', {}).get('items', []):
             musicas.append({
-                "id": track['id'],
-                "nome": track['name'],
-                "artista": ", ".join([a['name'] for a in track['artists']]),
-                "album": track['album']['name'],
-                "duracao_ms": track['duration_ms'],
-                "popularidade": track['popularity'],
-                "url": track['external_urls']['spotify']
+                "id": track.get('id', ''),
+                "nome": track.get('name', ''),
+                "artista": ", ".join([a.get('name', '') for a in track.get('artists', [])]),
+                "album": track.get('album', {}).get('name', ''),
+                "duracao_ms": track.get('duration_ms', 0),
+                "popularidade": track.get('popularity', 0),
+                "url": track.get('external_urls', {}).get('spotify', '')
             })
         
         return {
@@ -70,7 +70,6 @@ def buscar_musica(
         }
     except Exception as e:
         return {"sucesso": False, "erro": str(e)}
-
 
 @mcp.tool()
 def buscar_artista(
